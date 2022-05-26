@@ -16,7 +16,8 @@ ARCHITECTURE archReg32 OF Reg32 IS
         BEGIN
             IF Reset = '1' THEN
                 StoredValue <= (others => '0');
-            ELSIF rising_edge(clk) AND enable = '1' THEN
+                -- It doesn't matter if it was rising or falling edge as value is readed asynchronously --
+            ELSIF falling_edge(clk) AND enable = '1' THEN
                 StoredValue <= InputValue;
             END IF;
         END PROCESS;

@@ -1,0 +1,50 @@
+vsim work.forwardingunit
+# vsim work.forwardingunit 
+# Start time: 23:41:10 on May 26,2022
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.forwardingunit(forwardingunit_arch)
+# vsim work.forwardingunit 
+# Start time: 23:34:19 on May 26,2022
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.forwardingunit(forwardingunit_arch)
+# vsim work.forwardingunit 
+# Start time: 23:26:19 on May 26,2022
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.forwardingunit(forwardingunit_arch)
+add wave -position insertpoint sim:/forwardingunit/*
+force -freeze sim:/forwardingunit/Rsrc1 111 0
+force -freeze sim:/forwardingunit/Rsrc2 000 0
+force -freeze sim:/forwardingunit/needFUFlag 0 0
+force -freeze sim:/forwardingunit/RegWriteFlagInMEM 0 0
+force -freeze sim:/forwardingunit/RegWriteFlagInWB 0 0
+force -freeze sim:/forwardingunit/RdstMEM 100 0
+force -freeze sim:/forwardingunit/RdstWB 100 0
+run
+force -freeze sim:/forwardingunit/needFUFlag 1 0
+run
+force -freeze sim:/forwardingunit/RegWriteFlagInMEM 1 0
+run
+force -freeze sim:/forwardingunit/RegWriteFlagInWB 1 0
+run
+force -freeze sim:/forwardingunit/RdstMEM 111 0
+force -freeze sim:/forwardingunit/RdstWB 111 0
+run
+force -freeze sim:/forwardingunit/RdstWB 000 0
+run
+force -freeze sim:/forwardingunit/RdstMEM 000 0
+force -freeze sim:/forwardingunit/RdstWB 111 0
+run
+force -freeze sim:/forwardingunit/RegWriteFlagInWB 0 0
+run
+run
+force -freeze sim:/forwardingunit/needFUFlag 0 0
+run
