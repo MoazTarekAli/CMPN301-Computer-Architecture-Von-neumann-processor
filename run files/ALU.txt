@@ -1,0 +1,39 @@
+vsim work.alu
+# vsim work.alu 
+# Start time: 18:25:50 on May 26,2022
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.alu(alu_arch)
+# vsim work.alu 
+# Start time: 18:21:57 on May 26,2022
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.alu(alu_arch)
+add wave -position insertpoint sim:/alu/*
+force -freeze sim:/alu/ALUControlSignals 000 0
+force -freeze sim:/alu/FirstOperand 16#F0F0A0FF 0
+force -freeze sim:/alu/SecondOperand 16#FFFF0000 0
+run
+force -freeze sim:/alu/ALUControlSignals 111 0
+run
+force -freeze sim:/alu/ALUControlSignals 001 0
+run
+run
+force -freeze sim:/alu/FirstOperand 16#00000001 0
+run
+force -freeze sim:/alu/ALUControlSignals 010 0
+run
+force -freeze sim:/alu/ALUControlSignals 011 0
+run
+force -freeze sim:/alu/ALUControlSignals 100 0
+run
+force -freeze sim:/alu/ALUControlSignals 101 0
+run
+run
+force -freeze sim:/alu/ALUControlSignals 111 0
+run
+quit -sim
