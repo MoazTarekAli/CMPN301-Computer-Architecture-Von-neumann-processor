@@ -23,17 +23,21 @@ ARCHITECTURE ALU_arch OF ALU IS
 
                 -- ALU Control Signals and Carry Flag
                 IF    (ALUControlSignals = "001") THEN
-                    ALUResultTemp := std_logic_vector(unsigned('0' & FirstOperand) + unsigned('0' & SecondOperand));
+                    ALUResultTemp := std_logic_vector(to_signed(to_integer(signed(FirstOperand) + signed(SecondOperand)), 33));
                     FlagsTemp(2) := ALUResultTemp(32);
                 ELSIF (ALUControlSignals = "010") THEN
-                    ALUResultTemp := std_logic_vector(unsigned('1' & FirstOperand) - unsigned('0' & SecondOperand));
-                    FlagsTemp(2) := not ALUResultTemp(32);
+                    ALUResultTemp := std_logic_vector(to_signed(to_integer(signed(FirstOperand) - signed(SecondOperand)), 33));
+                    IF (FirstOperand > SecondOperand) THEN
+                        FlagsTemp(2) := '1';
+                    else
+                        FlagsTemp(2) := '0';
+                    end if;
                 ELSIF (ALUControlSignals = "011") THEN
                     ALUResultTemp := '0' & (FirstOperand and SecondOperand);
                 ELSIF (ALUControlSignals = "100") THEN
                     ALUResultTemp := '0' & (not FirstOperand);
                 ELSIF (ALUControlSignals = "101") THEN
-                    ALUResultTemp := std_logic_vector(unsigned('0' & FirstOperand) + 1);
+                    ALUResultTemp := std_logic_vector(to_signed(to_integer(signed(FirstOperand) + 1), 33));
                 ELSIF (ALUControlSignals = "000") THEN
                     ALUResultTemp := '0' & FirstOperand;
                 ELSIF (ALUControlSignals = "111") THEN

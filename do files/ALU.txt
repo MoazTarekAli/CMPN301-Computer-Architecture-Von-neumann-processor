@@ -15,8 +15,8 @@ vsim work.alu
 # Loading work.alu(alu_arch)
 add wave -position insertpoint sim:/alu/*
 force -freeze sim:/alu/ALUControlSignals 000 0
-force -freeze sim:/alu/FirstOperand 16#F0F0A0FF 0
-force -freeze sim:/alu/SecondOperand 16#FFFF0000 0
+force -freeze sim:/alu/FirstOperand 16#0000000F 0
+force -freeze sim:/alu/SecondOperand 16#000000F0 0
 run
 force -freeze sim:/alu/ALUControlSignals 111 0
 run
@@ -36,4 +36,3 @@ run
 run
 force -freeze sim:/alu/ALUControlSignals 111 0
 run
-quit -sim
