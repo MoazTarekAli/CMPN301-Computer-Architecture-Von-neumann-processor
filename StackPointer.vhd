@@ -8,7 +8,7 @@ ENTITY StackPointer IS
         Reset: IN std_logic;
         PushOrPopSelector: IN std_logic;
         SPSelector: IN std_logic;
-        SPToMemory: OUT std_logic_vector(31 DOWNTO 0));
+        SPToMemory: OUT std_logic_vector(19 DOWNTO 0));
 END ENTITY StackPointer;
 
 ARCHITECTURE StackPointer_arch OF StackPointer IS
@@ -22,13 +22,13 @@ ARCHITECTURE StackPointer_arch OF StackPointer IS
     END COMPONENT Register20Bits;
 
     SIGNAL NewSP : std_logic_vector(19 DOWNTO 0) := (others => '1');
-    SIGNAL SP : std_logic_vector(31 DOWNTO 0) := (others => '0');
+    SIGNAL SP : std_logic_vector(19 DOWNTO 0) := (others => '0');
 
     BEGIN
-        SP_Buffer: Register20Bits PORT MAP (clk => clk, Reset => Reset, enable => SPSelector, InputValue => NewSP, StoredValue => SP(19 DOWNTO 0));
+        SP_Buffer: Register20Bits PORT MAP (clk => clk, Reset => Reset, enable => SPSelector, InputValue => NewSP, StoredValue => SP);
         
-        NewSP <= std_logic_vector(unsigned(SP(19 DOWNTO 0)) - 1) WHEN PushOrPopSelector = '0'
-        ELSE std_logic_vector(unsigned(SP(19 DOWNTO 0)) + 1);
+        NewSP <= std_logic_vector(unsigned(SP) - 1) WHEN PushOrPopSelector = '0'
+        ELSE std_logic_vector(unsigned(SP) + 1);
 
         SPToMemory <= SP WHEN PushOrPopSelector = '0'
         ELSE std_logic_vector(unsigned(SP) + 1);
