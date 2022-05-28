@@ -1,0 +1,13 @@
+vsim work.wb_cu_buffer
+
+add wave -position insertpoint sim:/wb_cu_buffer/*
+force -freeze sim:/wb_cu_buffer/clk 1 0, 0 {50 ps} -r 100
+run
+force -freeze sim:/wb_cu_buffer/Flush 1 0
+run
+force -freeze sim:/wb_cu_buffer/Flush 0 0
+force -freeze sim:/wb_cu_buffer/Enable 1 0
+force -freeze sim:/wb_cu_buffer/RegWriteFlag 1 0
+run
+force -freeze sim:/wb_cu_buffer/MEMDataOrEXResultSelector 0 0
+run
