@@ -14,6 +14,7 @@ ENTITY EX_CU_Buffer IS
         NeedFU : IN std_logic;
         SetC : IN std_logic;
         JumpAllow : IN std_logic;
+        JumpType : IN std_logic_vector(1 downto 0);
         FlagsAllowUpdate : IN std_logic_vector(1 downto 0);
         EXOperandType : IN std_logic_vector(1 downto 0);
         ALUControlSignals : IN std_logic_vector(2 downto 0);
@@ -24,6 +25,7 @@ ENTITY EX_CU_Buffer IS
         NeedFUOut : OUT std_logic;
         SetCOut : OUT std_logic;
         JumpAllowOut : OUT std_logic;
+        JumpTypeOut : OUT std_logic_vector(1 downto 0);
         FlagsAllowUpdateOut : OUT std_logic_vector(1 downto 0);
         EXOperandTypeOut : OUT std_logic_vector(1 downto 0);
         ALUControlSignalsOut : OUT std_logic_vector(2 downto 0));
@@ -40,6 +42,7 @@ ARCHITECTURE EX_CU_Buffer_arch OF EX_CU_Buffer IS
                 NeedFUOut <= '0';
                 SetCOut <= '0';
                 JumpAllowOut <= '0';
+                JumpTypeOut <= "00";
                 FlagsAllowUpdateOut <= "00";
                 EXOperandTypeOut <= "00";
                 ALUControlSignalsOut <= "000";
@@ -50,6 +53,7 @@ ARCHITECTURE EX_CU_Buffer_arch OF EX_CU_Buffer IS
                 NeedFUOut <= NeedFU;
                 SetCOut <= SetC;
                 JumpAllowOut <= JumpAllow;
+                JumpTypeOut <= JumpType;
                 FlagsAllowUpdateOut <= FlagsAllowUpdate;
                 EXOperandTypeOut <= EXOperandType;
                 ALUControlSignalsOut <= ALUControlSignals;
