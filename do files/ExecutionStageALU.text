@@ -1,0 +1,32 @@
+vsim work.executionstagealu
+
+add wave -position insertpoint sim:/executionstagealu/*
+force -freeze sim:/executionstagealu/Rsrc1 101 0
+force -freeze sim:/executionstagealu/Rdst 111 0
+force -freeze sim:/executionstagealu/SwapSelector 0 0
+force -freeze sim:/executionstagealu/InputPort 16#FFFF0000 0
+force -freeze sim:/executionstagealu/Rdata1 16#F0F0F0F0 0
+force -freeze sim:/executionstagealu/Rdata2 16#0 0
+force -freeze sim:/executionstagealu/Immediate 16#0AAA00AAA 0
+force -freeze sim:/executionstagealu/ExexutionResultInMemory 16#DDDDDDDDD 0
+force -freeze sim:/executionstagealu/MemoryResultInWriteBack 16#55550000 0
+run
+force -freeze sim:/executionstagealu/Rdata2 16#0000FFFF 0
+noforce sim:/executionstagealu/ALUControlSignals
+force -freeze sim:/executionstagealu/ALUControlSignals 001 0
+run
+force -freeze sim:/executionstagealu/ALUControlSignals 010 0
+run
+force -freeze sim:/executionstagealu/ALUControlSignals 011 0
+run
+force -freeze sim:/executionstagealu/ALUControlSignals 100 0
+run
+force -freeze sim:/executionstagealu/ALUControlSignals 101 0
+run
+force -freeze sim:/executionstagealu/ALUControlSignals 000 0
+run
+run
+force -freeze sim:/executionstagealu/ALUControlSignals 111 0
+run
+force -freeze sim:/executionstagealu/FinalRdst 000 0
+run
