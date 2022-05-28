@@ -1,0 +1,19 @@
+vsim work.mem_cu_buffer
+
+add wave -position insertpoint sim:/mem_cu_buffer/*
+force -freeze sim:/mem_cu_buffer/clk 1 0, 0 {50 ps} -r 100
+force -freeze sim:/mem_cu_buffer/Flush 1 0
+run
+force -freeze sim:/mem_cu_buffer/Flush 0 0
+force -freeze sim:/mem_cu_buffer/Enable 1 0
+force -freeze sim:/mem_cu_buffer/SPSelector 0 0
+force -freeze sim:/mem_cu_buffer/PushOrPopSelector 1 0
+force -freeze sim:/mem_cu_buffer/CallOrReturnSelector 0 0
+force -freeze sim:/mem_cu_buffer/MemoryRead 1 0
+force -freeze sim:/mem_cu_buffer/MemoryWrite 0 0
+force -freeze sim:/mem_cu_buffer/AddressSelector 11 0
+force -freeze sim:/mem_cu_buffer/WriteDateSelector 0 0
+force -freeze sim:/mem_cu_buffer/InterruptOrCallOrReturn 1 0
+run
+force -freeze sim:/mem_cu_buffer/Flush 1 0
+run
