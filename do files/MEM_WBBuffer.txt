@@ -1,0 +1,17 @@
+vsim work.mem_wbbuffer
+
+add wave -position insertpoint sim:/mem_wbbuffer/*
+force -freeze sim:/mem_wbbuffer/clk 1 0, 0 {50 ps} -r 100
+force -freeze sim:/mem_wbbuffer/Flush 1 0
+run
+run
+force -freeze sim:/mem_wbbuffer/Enable 1 0
+force -freeze sim:/mem_wbbuffer/DataMemory 16#FFFF0000 0
+force -freeze sim:/mem_wbbuffer/EXResult 16#FF0F000F 0
+force -freeze sim:/mem_wbbuffer/Rdst 111 0
+run
+run
+force -freeze sim:/mem_wbbuffer/Flush 0 0
+run
+run
+run
