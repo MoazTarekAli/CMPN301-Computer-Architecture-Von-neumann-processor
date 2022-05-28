@@ -1,0 +1,36 @@
+vsim work.hazarddetectionunit
+
+add wave -position insertpoint sim:/hazarddetectionunit/*
+force -freeze sim:/hazarddetectionunit/HLTFlag 1 0
+force -freeze sim:/hazarddetectionunit/Reset 0 0
+force -freeze sim:/hazarddetectionunit/SwapOrInterruptDelay 0 0
+force -freeze sim:/hazarddetectionunit/JumpFlag 0 0
+force -freeze sim:/hazarddetectionunit/MEM_Read 0 0
+force -freeze sim:/hazarddetectionunit/MEM_Write 0 0
+force -freeze sim:/hazarddetectionunit/Call_Ret_IntFlag 0 0
+force -freeze sim:/hazarddetectionunit/Rsrc1_EX 101 0
+force -freeze sim:/hazarddetectionunit/Rsrc2_EX 011 0
+force -freeze sim:/hazarddetectionunit/Rdst_MEM 111 0
+run
+force -freeze sim:/hazarddetectionunit/Reset 1 0
+run
+run
+force -freeze sim:/hazarddetectionunit/Reset 0 0
+force -freeze sim:/hazarddetectionunit/HLTFlag 0 0
+run
+force -freeze sim:/hazarddetectionunit/SwapOrInterruptDelay 1 0
+run
+force -freeze sim:/hazarddetectionunit/SwapOrInterruptDelay 0 0
+force -freeze sim:/hazarddetectionunit/JumpFlag 1 0
+run
+force -freeze sim:/hazarddetectionunit/Call_Ret_IntFlag 1 0
+run
+force -freeze sim:/hazarddetectionunit/Rdst_MEM 011 0
+run
+force -freeze sim:/hazarddetectionunit/Call_Ret_IntFlag 0 0
+run
+force -freeze sim:/hazarddetectionunit/MEM_Read 1 0
+run
+force -freeze sim:/hazarddetectionunit/MEM_Read 0 0
+force -freeze sim:/hazarddetectionunit/MEM_Write 1 0
+run
