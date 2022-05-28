@@ -4,7 +4,8 @@ USE IEEE.std_logic_1164.all;
 ENTITY EX_CU_Buffer IS
     PORT(
         clk: IN std_logic;
-        Flush: IN std_logic;
+        FlushAtNextFall: IN std_logic;
+        FlushNow: IN std_logic;
         Enable: IN std_logic;
         
         OutputPortAllow : IN std_logic;
@@ -30,9 +31,9 @@ END ENTITY EX_CU_Buffer;
 
 ARCHITECTURE EX_CU_Buffer_arch OF EX_CU_Buffer IS
     BEGIN
-        PROCESS(clk, Flush)	
+        PROCESS(clk, FlushAtNextFall, FlushNow)	
         BEGIN
-            IF Flush = '1' THEN
+            IF (falling_edge(clk) AND FlushAtNextFall = '1') OR FlushNow = '1' THEN
                 OutputPortAllowOut <= '0';
                 ALUOrInputSelectorOut <= '0';
                 SwapSelectorOut <= '0';

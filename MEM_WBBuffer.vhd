@@ -5,7 +5,8 @@ USE IEEE.std_logic_1164.all;
 ENTITY MEM_WBBuffer IS
     PORT(
         clk: IN std_logic;
-        Flush: IN std_logic;
+        FlushAtNextFall: IN std_logic;
+        FlushNow: IN std_logic;
         Enable: IN std_logic;
 
         DataMemory : IN std_logic_vector(31 downto 0);
@@ -19,9 +20,9 @@ END ENTITY MEM_WBBuffer;
 
 ARCHITECTURE MEM_WBBuffer_arch OF MEM_WBBuffer IS
     BEGIN
-        PROCESS(clk, Flush)	
+        PROCESS(clk, FlushAtNextFall, FlushNow)	
         BEGIN
-            IF Flush = '1' THEN
+            IF (falling_edge(clk) AND FlushAtNextFall = '1') OR FlushNow = '1' THEN
                 DataMemoryOut <= (others => '0');
                 EXResultOut <= (others => '0');
                 RdstOut <= (others => '0');

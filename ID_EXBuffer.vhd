@@ -4,7 +4,8 @@ USE IEEE.std_logic_1164.all;
 ENTITY ID_EXBuffer IS
     PORT(
         clk: IN std_logic;
-        Flush: IN std_logic;
+        FlushAtNextFall: IN std_logic;
+        FlushNow: IN std_logic;
         Enable: IN std_logic;
 
         ReadData1 : IN std_logic_vector(31 downto 0);
@@ -28,9 +29,9 @@ END ENTITY ID_EXBuffer;
 
 ARCHITECTURE ID_EXBuffer_arch OF ID_EXBuffer IS
     BEGIN
-        PROCESS(clk, Flush)	
+        PROCESS(clk, FlushAtNextFall, FlushNow)	
         BEGIN
-            IF Flush = '1' THEN
+            IF (falling_edge(clk) AND FlushAtNextFall = '1') OR FlushNow = '1' THEN
                 ReadData1Out <= (others => '0');
                 ReadData2Out <= (others => '0');
                 ImmediateOut <= (others => '0');

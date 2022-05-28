@@ -4,7 +4,8 @@ USE IEEE.std_logic_1164.all;
 ENTITY WB_CU_Buffer IS
     PORT(
         clk: IN std_logic;
-        Flush: IN std_logic;
+        FlushAtNextFall: IN std_logic;
+        FlushNow: IN std_logic;
         Enable: IN std_logic;
         
         RegWriteFlag : IN std_logic;
@@ -16,9 +17,9 @@ END ENTITY WB_CU_Buffer;
 
 ARCHITECTURE WB_CU_Buffer_arch OF WB_CU_Buffer IS
     BEGIN
-        PROCESS(clk, Flush)	
+        PROCESS(clk, FlushAtNextFall, FlushNow)	
         BEGIN
-            IF Flush = '1' THEN
+            IF (falling_edge(clk) AND FlushAtNextFall = '1') OR FlushNow = '1' THEN
                 RegWriteFlagOut <= '0';
                 MEMDataOrEXResultSelectorOut <= '0';
             ELSIF falling_edge(clk) AND Enable = '1' THEN

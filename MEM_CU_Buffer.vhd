@@ -4,7 +4,8 @@ USE IEEE.std_logic_1164.all;
 ENTITY MEM_CU_Buffer IS
     PORT(
         clk: IN std_logic;
-        Flush: IN std_logic;
+        FlushAtNextFall: IN std_logic;
+        FlushNow: IN std_logic;
         Enable: IN std_logic;
         
         SPSelector : IN std_logic;
@@ -28,9 +29,9 @@ END ENTITY MEM_CU_Buffer;
 
 ARCHITECTURE MEM_CU_Buffer_arch OF MEM_CU_Buffer IS
     BEGIN
-        PROCESS(clk, Flush)	
+        PROCESS(clk, FlushAtNextFall, FlushNow)	
         BEGIN
-            IF Flush = '1' THEN
+            IF (falling_edge(clk) AND FlushAtNextFall = '1') OR FlushNow = '1' THEN
                 SPSelectorOut <= '0';
                 PushOrPopSelectorOut <= '0';
                 CallOrReturnSelectorOut <= '0';

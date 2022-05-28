@@ -4,7 +4,8 @@ USE IEEE.std_logic_1164.all;
 ENTITY IF_IDBuffer IS
     PORT(
         clk: IN std_logic;
-        Flush: IN std_logic;
+        FlushAtNextFall: IN std_logic;
+        FlushNow: IN std_logic;
         Enable: IN std_logic;
         InterruptFlag : IN std_logic;
         InputPort: IN std_logic_vector(31 DOWNTO 0);
@@ -23,9 +24,9 @@ END ENTITY IF_IDBuffer;
 
 ARCHITECTURE IF_IDBuffer_arch OF IF_IDBuffer IS
     BEGIN
-        PROCESS(clk, Flush)	
+        PROCESS(clk, FlushAtNextFall, FlushNow)	
         BEGIN
-            IF Flush = '1' THEN
+            IF (falling_edge(clk) AND FlushAtNextFall = '1') OR FlushNow = '1' THEN
                 OpCode <= (others => '0');
                 PCOut <= (others => '0');
                 InterruptFlagOut <= '0';
