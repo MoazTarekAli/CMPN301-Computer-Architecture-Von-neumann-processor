@@ -9,6 +9,7 @@ ENTITY ProgramCounter IS
         Interrupt: IN std_logic;
         CallRetSelector: IN std_logic;
         PCSelector: IN std_logic_vector(1 downto 0);
+        MemoryInstructionReset : IN std_logic_vector(31 downto 0);
         IMMFromEXForJumping : IN std_logic_vector(31 downto 0);
         IMMFromMEMForCall : IN std_logic_vector(31 downto 0);
         ReadDataFromMEM: IN std_logic_vector(31 downto 0);
@@ -27,10 +28,11 @@ ARCHITECTURE ProgramCounter_arch OF ProgramCounter IS
     END COMPONENT Register20Bits;
 
     SIGNAL NewPC : std_logic_vector(19 DOWNTO 0) := (others => '0');
+    SIGNAL PCToStore : std_logic_vector(19 DOWNTO 0);
     SIGNAL PC : std_logic_vector(19 DOWNTO 0);
 
     BEGIN
-        PC_Buffer: Register20Bits PORT MAP (clk => clk, Reset => Reset, enable => '1', InputValue => NewPC, StoredValue => PC);
+        PC_Buffer: Register20Bits PORT MAP (clk => clk, Reset => '0', enable => '1', InputValue => PCToStore, StoredValue => PC);
         
         NewPC <= std_logic_vector(unsigned(PC) + 1) WHEN PCSelector = "00"
         ELSE IMMFromEXForJumping(19 DOWNTO 0) WHEN PCSelector = "01"
@@ -38,7 +40,10 @@ ARCHITECTURE ProgramCounter_arch OF ProgramCounter IS
         ELSE ReadDataFromMEM(19 DOWNTO 0) WHEN PCSelector = "10" and CallRetSelector = '1'
         ELSE PC;
 
-        PCToMemory <= NewPC;
+        PCToStore <= MemoryInstructionReset(19 DOWNTO 0) WHEN Reset = '1'
+        ELSE NewPC;
+
+        PCToMemory <= NewPC;    
 
         PCToBeStoredInInterrupts <= PC WHEN Interrupt = '1'
         ELSE std_logic_vector(unsigned(PC) + 1);

@@ -36,3 +36,15 @@ run
 force -freeze sim:/programcounter/CallRetSelector 1 0
 run
 run
+force -freeze sim:/programcounter/MemoryInstructionReset 16#FFFFFFFF 0
+force -freeze sim:/programcounter/Reset 1 0
+run
+run
+run
+force -freeze sim:/programcounter/MemoryInstructionReset 11111111111111111111111111111100 0
+run
+run
+run
+run
+run
+run
