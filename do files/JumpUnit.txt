@@ -1,0 +1,16 @@
+vsim work.jumpunit
+
+add wave -position insertpoint sim:/jumpunit/*
+force -freeze sim:/jumpunit/JumpAllow 1 0
+force -freeze sim:/jumpunit/JumpAllow 0 0
+force -freeze sim:/jumpunit/JumpType 11 0
+force -freeze sim:/jumpunit/Flags 101 0
+run
+force -freeze sim:/jumpunit/JumpAllow 1 0
+run
+force -freeze sim:/jumpunit/JumpType 10 0
+run
+force -freeze sim:/jumpunit/JumpType 01 0
+run
+force -freeze sim:/jumpunit/JumpType 00 0
+run
