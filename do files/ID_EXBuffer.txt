@@ -1,0 +1,27 @@
+vsim work.id_exbuffer
+
+add wave -position insertpoint sim:/id_exbuffer/*
+force -freeze sim:/id_exbuffer/clk 1 0, 0 {50 ps} -r 100
+noforce sim:/id_exbuffer/Flush
+force -freeze sim:/id_exbuffer/Flush 1 0
+run
+run
+run
+run
+force -freeze sim:/id_exbuffer/Flush 0 0
+force -freeze sim:/id_exbuffer/Enable 0 0
+run
+run
+force -freeze sim:/id_exbuffer/Enable 1 0
+run
+run
+force -freeze sim:/id_exbuffer/ReadData1 16#FF00FF00 0
+force -freeze sim:/id_exbuffer/ReadData2 16#FF00FFAA 0
+force -freeze sim:/id_exbuffer/Immediate 16#FFBBFF00 0
+force -freeze sim:/id_exbuffer/InputPort 16#FF004F00 0
+force -freeze sim:/id_exbuffer/PC 16#FFFFF 0
+force -freeze sim:/id_exbuffer/Rsrc1 010 0
+force -freeze sim:/id_exbuffer/Rsrc2 101 0
+force -freeze sim:/id_exbuffer/Rdst 111 0
+run
+run

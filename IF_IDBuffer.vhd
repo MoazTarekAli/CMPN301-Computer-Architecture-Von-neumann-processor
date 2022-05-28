@@ -8,11 +8,11 @@ ENTITY IF_IDBuffer IS
         Enable: IN std_logic;
         InterruptFlag : IN std_logic;
         InputPort: IN std_logic_vector(31 DOWNTO 0);
-        PC : IN std_logic_vector(31 DOWNTO 0);
+        PC : IN std_logic_vector(19 DOWNTO 0);
         Instruction : IN std_logic_vector(31 DOWNTO 0);
         
         OpCode : OUT std_logic_vector(4 DOWNTO 0);
-        PCOut : OUT std_logic_vector(31 DOWNTO 0);
+        PCOut : OUT std_logic_vector(19 DOWNTO 0);
         InterruptFlagOut : OUT std_logic;
         Rsrc1 : OUT std_logic_vector(2 DOWNTO 0);
         Rsrc2 : OUT std_logic_vector(2 DOWNTO 0);
