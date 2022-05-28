@@ -25,7 +25,8 @@ ARCHITECTURE ALU_arch OF ALU IS
                 -- ALU Control Signals and Carry Flag
                 IF    (ALUControlSignals = "001") THEN
                     ALUResultTemp := std_logic_vector(to_signed(to_integer(signed(FirstOperand) + signed(SecondOperand)), 33));
-                    IF (signed(FirstOperand) + signed(SecondOperand) > signed(HighestValue) or signed(FirstOperand) + signed(SecondOperand) < -signed(HighestValue) ) THEN
+                    -- Not Sure
+                    IF (signed(FirstOperand) + signed(SecondOperand) > signed(HighestValue) or (signed(FirstOperand) < signed(SecondOperand) and 0 > signed(SecondOperand))) THEN
                         FlagsTemp(2) := '1';
                     END IF;
                 ELSIF (ALUControlSignals = "010") THEN

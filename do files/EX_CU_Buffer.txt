@@ -1,0 +1,27 @@
+vsim work.ex_cu_buffer
+
+add wave -position insertpoint sim:/ex_cu_buffer/*
+force -freeze sim:/ex_cu_buffer/clk 1 0, 0 {50 ps} -r 100
+force -freeze sim:/ex_cu_buffer/Flush 1 0
+run
+run
+force -freeze sim:/ex_cu_buffer/Enable 0 0
+
+force -freeze sim:/ex_cu_buffer/ALUOrInputSelector 0 0
+force -freeze sim:/ex_cu_buffer/SwapSelector 1 0
+force -freeze sim:/ex_cu_buffer/NeedFU 0 0
+force -freeze sim:/ex_cu_buffer/SetC 1 0
+force -freeze sim:/ex_cu_buffer/JumpAllow 0 0
+force -freeze sim:/ex_cu_buffer/FlagsAllowUpdate 10 0
+force -freeze sim:/ex_cu_buffer/EXOperandType 01 0
+force -freeze sim:/ex_cu_buffer/ALUControlSignals 000 0
+run
+force -freeze sim:/ex_cu_buffer/Enable 1 0
+force -freeze sim:/ex_cu_buffer/OutputPortAllow 1 0
+run
+force -freeze sim:/ex_cu_buffer/Flush 0 0
+run
+run
+force -freeze sim:/ex_cu_buffer/ALUControlSignals 001 0
+
+run
