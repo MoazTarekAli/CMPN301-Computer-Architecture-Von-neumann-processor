@@ -17,3 +17,24 @@ force -freeze sim:/controlunit/OPCode 00010 0
 run
 force -freeze sim:/controlunit/OPCode 00011 0
 run
+force -freeze sim:/controlunit/OPCode 00100 0
+run
+force -freeze sim:/controlunit/OPCode 00101 0
+run
+force -freeze sim:/controlunit/OPCode 00110 0
+run
+force -freeze sim:/controlunit/OPCode 01000 0
+run
+force -freeze sim:/controlunit/OPCode 01001 0
+run
+run
+run
+run
+force -freeze sim:/controlunit/OPCode 01010 0
+run
+force -freeze sim:/controlunit/OPCode 01011 0
+run
+force -freeze sim:/controlunit/OPCode 01100 0
+force -freeze sim:/controlunit/OPCode 01100 0
+run
+force -freeze 
