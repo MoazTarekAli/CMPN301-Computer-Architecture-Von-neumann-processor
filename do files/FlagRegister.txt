@@ -24,3 +24,12 @@ force -freeze sim:/flagregister/FlagsAllow 00 0
 force -freeze sim:/flagregister/JumpUpdateFlags 000 0
 run
 run
+force -freeze sim:/flagregister/JumpAllow 0 0
+force -freeze sim:/flagregister/FlagsAllow 11 0
+force -freeze sim:/flagregister/Int_Ret_CallFlag 1 0
+run
+run
+force -freeze sim:/flagregister/Int_Ret_CallFlag 0 0
+run
+run
+
