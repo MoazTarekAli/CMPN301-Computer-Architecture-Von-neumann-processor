@@ -1,10 +1,5 @@
 vsim work.reg32
-# vsim work.reg32 
-# Start time: 19:59:18 on May 26,2022
-# Loading std.standard
-# Loading std.textio(body)
-# Loading ieee.std_logic_1164(body)
-# Loading work.reg32(archreg32)
+
 add wave -position insertpoint sim:/reg32/*
 force -freeze sim:/reg32/clk 0 0, 1 {50 ps} -r 100
 force -freeze sim:/reg32/Reset 1 0

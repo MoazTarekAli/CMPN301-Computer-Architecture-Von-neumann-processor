@@ -1,12 +1,5 @@
 vsim work.registers
-# vsim work.registers 
-# Start time: 21:34:41 on May 26,2022
-# Loading std.standard
-# Loading std.textio(body)
-# Loading ieee.std_logic_1164(body)
-# Loading ieee.numeric_std(body)
-# Loading work.registers(registers_arch)
-# Loading work.reg32(archreg32)
+
 add wave -position insertpoint sim:/registers/*
 force -freeze sim:/registers/clk 0 0, 1 {50 ps} -r 100
 force -freeze sim:/registers/Reset 1 0

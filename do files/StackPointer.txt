@@ -1,20 +1,5 @@
 vsim work.stackpointer
-# vsim work.stackpointer 
-# Start time: 15:12:47 on May 27,2022
-# Loading std.standard
-# Loading std.textio(body)
-# Loading ieee.std_logic_1164(body)
-# Loading ieee.numeric_std(body)
-# Loading work.stackpointer(stackpointer_arch)
-# Loading work.register20bits(register20bits_arch)
-# vsim work.stackpointer 
-# Start time: 15:10:44 on May 27,2022
-# Loading std.standard
-# Loading std.textio(body)
-# Loading ieee.std_logic_1164(body)
-# Loading ieee.numeric_std(body)
-# Loading work.stackpointer(stackpointer_arch)
-# Loading work.register20bits(register20bits_arch)
+
 add wave -position insertpoint sim:/stackpointer/*
 force -freeze sim:/stackpointer/clk 1 0, 0 {50 ps} -r 100
 force -freeze sim:/stackpointer/Reset 1 0
