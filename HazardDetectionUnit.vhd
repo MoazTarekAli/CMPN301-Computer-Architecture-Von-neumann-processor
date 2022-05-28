@@ -11,6 +11,7 @@ ENTITY HazardDetectionUnit IS
         MEM_Read : IN std_logic;
         MEM_Write : IN std_logic;
         Call_Ret_IntFlag : IN std_logic;
+        NeedFUFlag : IN std_logic;
         Rsrc1_EX : IN std_logic_vector(2 DOWNTO 0);
         Rsrc2_EX : IN std_logic_vector(2 DOWNTO 0);
         Rdst_MEM : IN std_logic_vector(2 DOWNTO 0);
@@ -35,7 +36,7 @@ ARCHITECTURE HazardDetectionUnit_arch OF HazardDetectionUnit IS
     -- Then for Interrupt/Call/Return in Memory
     ELSE "101" WHEN Call_Ret_IntFlag = '1'
     -- Then For Load/Use Case
-    ELSE "000" WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1'
+    ELSE "000" WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1' and NeedFUFlag = '1'
     -- Then For Jump
     ElSE "101" WHEN JumpFlag = '1'
     -- Then For Swap/Interrupt in CU
@@ -52,7 +53,7 @@ ARCHITECTURE HazardDetectionUnit_arch OF HazardDetectionUnit IS
     -- Then for Interrupt/Call/Return in Memory
     ELSE "101" WHEN Call_Ret_IntFlag = '1'
     -- Then For Load/Use Case
-    ELSE "000" WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1'
+    ELSE "000" WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1' and NeedFUFlag = '1'
     -- Then For Jump
     ElSE "101" WHEN JumpFlag = '1'
     -- Then For Swap/Interrupt in CU
@@ -69,7 +70,7 @@ ARCHITECTURE HazardDetectionUnit_arch OF HazardDetectionUnit IS
     -- Then for Interrupt/Call/Return in Memory
     ELSE "101" WHEN Call_Ret_IntFlag = '1'
     -- Then For Load/Use Case
-    ELSE "100" WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1'
+    ELSE "100" WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1' and NeedFUFlag = '1'
     -- Then For Jump
     ElSE "001" WHEN JumpFlag = '1'
     -- Then For Swap/Interrupt in CU
@@ -86,7 +87,7 @@ ARCHITECTURE HazardDetectionUnit_arch OF HazardDetectionUnit IS
     -- Then for Interrupt/Call/Return in Memory
     ELSE '1' WHEN Call_Ret_IntFlag = '1'
     -- Then For Load/Use Case
-    ELSE '0' WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1'
+    ELSE '0' WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1' and NeedFUFlag = '1'
     -- Then For Jump
     ElSE '1' WHEN JumpFlag = '1'
     -- Then For Swap/Interrupt in CU
@@ -103,7 +104,7 @@ ARCHITECTURE HazardDetectionUnit_arch OF HazardDetectionUnit IS
     -- Then for Interrupt/Call/Return in Memory
     ELSE '0' WHEN Call_Ret_IntFlag = '1'
     -- Then For Load/Use Case
-    ELSE '1' WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1'
+    ELSE '1' WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1' and NeedFUFlag = '1'
     -- Then For Jump
     ElSE '0' WHEN JumpFlag = '1'
     -- Then For Swap/Interrupt in CU
@@ -120,7 +121,7 @@ ARCHITECTURE HazardDetectionUnit_arch OF HazardDetectionUnit IS
     -- Then for Interrupt/Call/Return in Memory
     ELSE "10" WHEN Call_Ret_IntFlag = '1'
     -- Then For Load/Use Case
-    ELSE "11" WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1'
+    ELSE "11" WHEN (Rsrc1_EX = Rdst_MEM OR Rsrc2_EX = Rdst_MEM) and MEM_Read = '1' and NeedFUFlag = '1'
     -- Then For Jump
     ElSE "01" WHEN JumpFlag = '1'
     -- Then For Swap/Interrupt in CU
