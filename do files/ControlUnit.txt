@@ -48,3 +48,11 @@ force -freeze sim:/controlunit/OPCode 10011 0
 run
 force -freeze sim:/controlunit/OPCode 10100 0
 run
+force -freeze sim:/controlunit/OPCode 11000 0
+run
+force -freeze sim:/controlunit/OPCode 11001 0
+run
+force -freeze sim:/controlunit/OPCode 11010 0
+run
+force -freeze sim:/controlunit/OPCode 11011 0
+run
