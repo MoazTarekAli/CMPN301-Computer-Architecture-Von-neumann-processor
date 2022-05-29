@@ -616,6 +616,120 @@ ARCHITECTURE ControlUnit_arch OF ControlUnit IS
                 -- WB Signals
                 RegWriteFlag <= '0';
                 MEMDataOrEXResultSelector <= '0';
+            ------ BRANCH operations ------
+            -- JZ Imm
+            ELSIF (OPcode = "11000") THEN
+                -- HU SIgnals
+                HLTFlag <= '0';
+                SwapOrInterruptDelay <= '0';
+                -- Ex Signals
+                OutputPortAllow <= '0';
+                ALUOrInputSelector <= '0';
+                SwapSelector <= '0';
+                NeedFU <= '0';
+                SetC <= '0';
+                JumpAllow <= '1';
+                JumpType <= "00";
+                FlagsAllowUpdate <= "00";
+                EXOperandType <= "00";
+                ALUControlSignals <= "000";
+                -- MEM Signals
+                SPSelector <= '0';
+                PushOrPopSelector <= '0';
+                CallOrReturnSelector <= '0';
+                MemoryRead <= '0';
+                MemoryWrite <= '0';
+                AddressSelector <= "00";
+                WriteDateSelector <= '0';
+                InterruptOrCallOrReturn <= '0';
+                -- WB Signals
+                RegWriteFlag <= '0';
+                MEMDataOrEXResultSelector <= '0';
+            -- JN Imm
+            ELSIF (OPcode = "11001") THEN
+                -- HU SIgnals
+                HLTFlag <= '0';
+                SwapOrInterruptDelay <= '0';
+                -- Ex Signals
+                OutputPortAllow <= '0';
+                ALUOrInputSelector <= '0';
+                SwapSelector <= '0';
+                NeedFU <= '0';
+                SetC <= '0';
+                JumpAllow <= '1';
+                JumpType <= "01";
+                FlagsAllowUpdate <= "00";
+                EXOperandType <= "00";
+                ALUControlSignals <= "000";
+                -- MEM Signals
+                SPSelector <= '0';
+                PushOrPopSelector <= '0';
+                CallOrReturnSelector <= '0';
+                MemoryRead <= '0';
+                MemoryWrite <= '0';
+                AddressSelector <= "00";
+                WriteDateSelector <= '0';
+                InterruptOrCallOrReturn <= '0';
+                -- WB Signals
+                RegWriteFlag <= '0';
+                MEMDataOrEXResultSelector <= '0';
+            -- JC Imm
+            ELSIF (OPcode = "11010") THEN
+                -- HU SIgnals
+                HLTFlag <= '0';
+                SwapOrInterruptDelay <= '0';
+                -- Ex Signals
+                OutputPortAllow <= '0';
+                ALUOrInputSelector <= '0';
+                SwapSelector <= '0';
+                NeedFU <= '0';
+                SetC <= '0';
+                JumpAllow <= '1';
+                JumpType <= "10";
+                FlagsAllowUpdate <= "00";
+                EXOperandType <= "00";
+                ALUControlSignals <= "000";
+                -- MEM Signals
+                SPSelector <= '0';
+                PushOrPopSelector <= '0';
+                CallOrReturnSelector <= '0';
+                MemoryRead <= '0';
+                MemoryWrite <= '0';
+                AddressSelector <= "00";
+                WriteDateSelector <= '0';
+                InterruptOrCallOrReturn <= '0';
+                -- WB Signals
+                RegWriteFlag <= '0';
+                MEMDataOrEXResultSelector <= '0';
+            -- JMP Imm
+            ELSIF (OPcode = "11011") THEN
+                -- HU SIgnals
+                HLTFlag <= '0';
+                SwapOrInterruptDelay <= '0';
+                -- Ex Signals
+                OutputPortAllow <= '0';
+                ALUOrInputSelector <= '0';
+                SwapSelector <= '0';
+                NeedFU <= '0';
+                SetC <= '0';
+                JumpAllow <= '1';
+                JumpType <= "11";
+                FlagsAllowUpdate <= "00";
+                EXOperandType <= "00";
+                ALUControlSignals <= "000";
+                -- MEM Signals
+                SPSelector <= '0';
+                PushOrPopSelector <= '0';
+                CallOrReturnSelector <= '0';
+                MemoryRead <= '0';
+                MemoryWrite <= '0';
+                AddressSelector <= "00";
+                WriteDateSelector <= '0';
+                InterruptOrCallOrReturn <= '0';
+                -- WB Signals
+                RegWriteFlag <= '0';
+                MEMDataOrEXResultSelector <= '0';
+            -- Call Imm
             END IF;
         END IF;
     END PROCESS;
