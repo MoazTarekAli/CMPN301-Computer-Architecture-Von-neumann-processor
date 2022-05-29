@@ -43,7 +43,8 @@ ARCHITECTURE ProgramCounter_arch OF ProgramCounter IS
         PCToStore <= MemoryInstructionReset(19 DOWNTO 0) WHEN Reset = '1'
         ELSE NewPC;
 
-        PCToMemory <= NewPC;    
+        PCToMemory <= PC WHEN PCSelector = "00"
+        ELSE NewPC;    
 
         PCToBeStoredInInterrupts <= PC WHEN Interrupt = '1'
         ELSE std_logic_vector(unsigned(PC) + 1);
