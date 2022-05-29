@@ -309,10 +309,44 @@ COMPONENT StackPointer IS
         SPSelector: IN std_logic;
         SPToMemory: OUT std_logic_vector(19 DOWNTO 0));
 END COMPONENT StackPointer;
---
+-- MEM/WB Buffer
+COMPONENT MEM_WBBuffer IS
+    PORT(
+        clk: IN std_logic;
+        FlushAtNextFall: IN std_logic;
+        FlushNow: IN std_logic;
+        Enable: IN std_logic;
+
+        DataMemory : IN std_logic_vector(31 downto 0);
+        EXResult : IN std_logic_vector(31 DOWNTO 0);
+        Rdst : IN std_logic_vector(2 DOWNTO 0);
+        
+        EXResultOut : OUT std_logic_vector(31 DOWNTO 0);
+        DataMemoryOut : OUT std_logic_vector(31 DOWNTO 0);
+        RdstOut : OUT std_logic_vector(2 DOWNTO 0));
+END COMPONENT MEM_WBBuffer;
+-- Forawrding Unit
+COMPONENT ForwardingUnit IS
+	PORT(
+        needFUFlag : IN STD_LOGIC;
+        RegWriteFlagInMEM : IN std_logic;
+        RegWriteFlagInWB : IN std_logic;
+        SwapSelector : IN std_logic;
+		Rsrc1 : IN std_logic_vector(2 DOWNTO 0);
+        Rsrc2 : IN std_logic_vector(2 DOWNTO 0);
+        RdstMEM : IN std_logic_vector(2 DOWNTO 0);
+        RdstWB : IN std_logic_vector(2 DOWNTO 0);
+
+        FUFirstOperand : OUT std_logic_vector(1 DOWNTO 0);
+        FUSecondOperand : OUT std_logic_vector(1 DOWNTO 0));
+END COMPONENT ForwardingUnit;
+
+-- END
 
 SIGNAL Memory_Address : std_logic_vector(19 DOWNTO 0) := (others=>'0');
 SIGNAL Memory_Write_Data : std_logic_vector(31 DOWNTO 0) := (others=>'0');
+
+SIGNAL FINAL_WB : std_logic_vector(31 DOWNTO 0) := (others=>'0');
 
 -- Program Counter Signals Out
     SIGNAL PC_To_Memory : std_logic_vector(19 DOWNTO 0);
@@ -435,17 +469,25 @@ SIGNAL Memory_Write_Data : std_logic_vector(31 DOWNTO 0) := (others=>'0');
     SIGNAL EX_MEM_Buffer_RdstOut : std_logic_vector(2 DOWNTO 0);
 -- Stack Pointer Signals Out
     SIGNAL SP_ToMemory : std_logic_vector(19 downto 0);
+-- MEM/WB Buffer Signals Out
+    SIGNAL MEM_WB_Buffer_EXResultOut : std_logic_vector(31 DOWNTO 0);
+    SIGNAL MEM_WB_Buffer_DataMemoryOut : std_logic_vector(31 DOWNTO 0);
+    SIGNAL MEM_WB_Buffer_RdstOut : std_logic_vector(2 DOWNTO 0);
+-- ForwardingUnit Signals Out
+    SIGNAL FU_FirstOperand : std_logic_vector(1 downto 0);
+    SIGNAL FU_SecondOperand : std_logic_vector(1 downto 0);
+--
 BEGIN
 -- Connecting to Fetch Stage
 FetchStage: ProgramCounter PORT MAP (clk => Clk,
                              Reset => Reset, 
                              Interrupt => Interrupt, 
-                             CallRetSelector => '1', 
+                             CallRetSelector => MEM_CU_2nd_Buffer_CallOrReturnSelectorOut, 
                              PCSelector => HDU_PC_Selector, 
                              MemoryInstructionReset => Memory_Instruction,
-                             IMMFromEXForJumping => (others => '0'),
-                             IMMFromMEMForCall => (others => '0'),
-                             ReadDataFromMEM => (others => '0'),
+                             IMMFromEXForJumping => ID_EX_Buffer_ImmediateOut,
+                             IMMFromMEMForCall => EX_MEM_Buffer_EXResultOut,
+                             ReadDataFromMEM => Memory_DataOut,
 
                              PCToBeStoredInInterrupts => PC_To_IF_ID_Buffer,
                              PCToMemory => PC_To_Memory);
@@ -484,11 +526,11 @@ IF_ID_Buffer: IF_IDBuffer PORT MAP (clk => Clk,
 -- Connecting to Register File
 RegisterFile: Registers PORT MAP (clk => Clk,
                              Reset => Reset,
-                             RegWriteFlag => '0',
+                             RegWriteFlag => WB_CU_3rd_Buffer_RegWriteFlagOut,
                              Rsrc1 => IF_ID_Buffer_Rsrc1,
                              Rsrc2 => IF_ID_Buffer_Rsrc2,
-                             Rdst  => "000",
-                             RegWriteData => (others => '0'),
+                             Rdst  => MEM_WB_Buffer_RdstOut,
+                             RegWriteData => FINAL_WB,
 
                              ReadData1 => Registers_ReadData1,
                              ReadData2 => Registers_ReadData2);
@@ -688,10 +730,10 @@ EUwest: ExecutionStageALU PORT MAP(
                              Rdata1 => ID_EX_Buffer_ReadData1Out,
                              Rdata2 => ID_EX_Buffer_ReadData2Out,
                              Immediate => IF_ID_Buffer_Immediate,
-                             ExexutionResultInMemory => (others => '0'),
-                             MemoryResultInWriteBack => (others => '0'),
-                             FuFirstOperandSelector => (others => '0'),
-                             FuSecondOperandSelector => (others => '0'),
+                             ExexutionResultInMemory => EX_MEM_Buffer_EXResultOut,
+                             MemoryResultInWriteBack => FINAL_WB,
+                             FuFirstOperandSelector => FU_FirstOperand,
+                             FuSecondOperandSelector => FU_SecondOperand,
                              EXOperandsSelector => EX_CU_Buffer_EXOperandTypeOut,
                              ALUControlSignals => EX_CU_Buffer_ALUControlSignalsOut,
                              ALUorInputSelector => EX_CU_Buffer_ALUOrInputSelectorOut,
@@ -747,11 +789,42 @@ SU: StackPointer PORT MAP (
                              SPToMemory => SP_ToMemory);
 -- Memory address and data
 Memory_Address <= (0 => '1',others => '0') WHEN MEM_CU_2nd_Buffer_AddressSelectorOut = "00"
-ELSE EX_MEM_Buffer_EXResultOut WHEN MEM_CU_2nd_Buffer_AddressSelectorOut = "01"
+ELSE EX_MEM_Buffer_EXResultOut(19 DOWNTO 0) WHEN MEM_CU_2nd_Buffer_AddressSelectorOut = "01"
 ELSE SP_ToMemory WHEN MEM_CU_2nd_Buffer_AddressSelectorOut = "10"
 ELSE (others => '0');
 
 Memory_Write_Data <= EX_MEM_Buffer_FlagsConcatenatedPCOut WHEN MEM_CU_2nd_Buffer_WriteDateSelectorOut = '0'
 ELSE EX_MEM_Buffer_ReadData1Out;
--- 
+-- MEM/WB buffer
+MEM_WBBUfffer: MEM_WBBuffer PORT MAP (
+                             clk => Clk, 
+                             FlushAtNextFall => '0',
+                             FlushNow => '0',
+                             Enable => '1',
+
+                             DataMemory => Memory_DataOut,
+                             EXResult => EX_MEM_Buffer_EXResultOut,
+                             Rdst => EX_MEM_Buffer_RdstOut,
+
+                             EXResultOut => MEM_WB_Buffer_EXResultOut,
+                             DataMemoryOut => MEM_WB_Buffer_DataMemoryOut,
+                             RdstOut => MEM_WB_Buffer_RdstOut);
+-- Final WB
+FINAL_WB <= MEM_WB_Buffer_DataMemoryOut WHEN WB_CU_3rd_Buffer_MEMDataOrEXResultSelectorOut = '1'
+ELSE MEM_WB_Buffer_EXResultOut;
+-- Forwarding Unit
+FuckYou : ForwardingUnit PORT MAP(
+                                 needFUFlag => EX_CU_Buffer_NeedFUOut,
+                                 RegWriteFlagInMEM => WB_CU_2nd_Buffer_RegWriteFlagOut,
+                                 RegWriteFlagInWB => WB_CU_3rd_Buffer_RegWriteFlagOut,
+                                 SwapSelector => EX_CU_Buffer_SwapSelectorOut,
+                                 Rsrc1 => ID_EX_Buffer_Rsrc1Out,
+                                 Rsrc2 => ID_EX_Buffer_Rsrc2Out,
+                                 RdstMEM => EX_MEM_Buffer_RdstOut,
+                                 RdstWB => MEM_WB_Buffer_RdstOut,
+ 
+                                 FUFirstOperand => FU_FirstOperand,
+                                 FUSecondOperand => FU_SecondOperand);
+
+
 END mainProcessor_arch;	

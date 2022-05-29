@@ -5,8 +5,4 @@
 (3) Registers : RegWriteFlag, RegWriteData, Rdst
 
 
-(5) ExecutionStageALU: ExexutionResultInMemory => (others => '0'),
-                             MemoryResultInWriteBack => (others => '0'),
-                             FuFirstOperandSelector => (others => '0'),
-                             FuSecondOperandSelector => (others => '0'),
 (6)
