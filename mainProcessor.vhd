@@ -300,6 +300,16 @@ COMPONENT EX_MEMBuffer IS
         FlagsConcatenatedPCOut: OUT std_logic_vector(31 DOWNTO 0);
         RdstOut : OUT std_logic_vector(2 DOWNTO 0));
 END COMPONENT EX_MEMBuffer;
+-- Stack Pointer
+COMPONENT StackPointer IS
+    PORT(
+        clk: IN std_logic;
+        Reset: IN std_logic;
+        PushOrPopSelector: IN std_logic;
+        SPSelector: IN std_logic;
+        SPToMemory: OUT std_logic_vector(19 DOWNTO 0));
+END COMPONENT StackPointer;
+--
 
 SIGNAL Memory_Address : std_logic_vector(19 DOWNTO 0) := (others=>'0');
 SIGNAL Memory_Write_Data : std_logic_vector(31 DOWNTO 0) := (others=>'0');
@@ -423,7 +433,8 @@ SIGNAL Memory_Write_Data : std_logic_vector(31 DOWNTO 0) := (others=>'0');
     SIGNAL EX_MEM_Buffer_EXResultOut : std_logic_vector(31 DOWNTO 0);
     SIGNAL EX_MEM_Buffer_FlagsConcatenatedPCOut: std_logic_vector(31 DOWNTO 0);
     SIGNAL EX_MEM_Buffer_RdstOut : std_logic_vector(2 DOWNTO 0);
-
+-- Stack Pointer Signals Out
+    SIGNAL SP_ToMemory : std_logic_vector(19 downto 0);
 BEGIN
 -- Connecting to Fetch Stage
 FetchStage: ProgramCounter PORT MAP (clk => Clk,
@@ -726,8 +737,21 @@ EX_MemBufffer: EX_MEMBuffer PORT MAP (
                              RdstOut => EX_MEM_Buffer_RdstOut);
 -- Output port
 OutputPort <= Ex_Result; -- WHEN EX_CU_Buffer_OutputPortAllowOut = '1' ELSE (others => 'Z') END;
-
+-- Connecting to Stack
+SU: StackPointer PORT MAP (
+                             clk => Clk,
+                             Reset => Reset,
+                             PushOrPopSelector => MEM_CU_2nd_Buffer_PushOrPopSelectorOut,
+                             SPSelector => MEM_CU_2nd_Buffer_SPSelectorOut,
+                             
+                             SPToMemory => SP_ToMemory);
 -- Memory address and data
+Memory_Address <= (0 => '1',others => '0') WHEN MEM_CU_2nd_Buffer_AddressSelectorOut = "00"
+ELSE EX_MEM_Buffer_EXResultOut WHEN MEM_CU_2nd_Buffer_AddressSelectorOut = "01"
+ELSE SP_ToMemory WHEN MEM_CU_2nd_Buffer_AddressSelectorOut = "10"
+ELSE (others => '0');
 
-
+Memory_Write_Data <= EX_MEM_Buffer_FlagsConcatenatedPCOut WHEN MEM_CU_2nd_Buffer_WriteDateSelectorOut = '0'
+ELSE EX_MEM_Buffer_ReadData1Out;
+-- 
 END mainProcessor_arch;	
