@@ -22,7 +22,7 @@ ENTITY ExecutionStageALU IS
         FinalRdst: OUT std_logic_vector(2 downto 0);
         EXResult : OUT std_logic_vector(31 downto 0);
         FUdata1Mem : OUT std_logic_vector(31 downto 0);
-        FLags : OUT std_logic_vector(3 downto 0)
+        FLags : OUT std_logic_vector(2 downto 0)
         );
 END ENTITY ExecutionStageALU;
 
@@ -34,7 +34,7 @@ ARCHITECTURE ExecutionStageALU_arch OF ExecutionStageALU IS
         FirstOperand      : IN std_logic_vector(31 DOWNTO 0);
         SecondOperand     : IN std_logic_vector(31 DOWNTO 0);
         ALUResult         : OUT std_logic_vector(31 DOWNTO 0);
-        Flags             : OUT std_logic_vector(3 DOWNTO 0));
+        Flags             : OUT std_logic_vector(2 DOWNTO 0));
     END COMPONENT ALU;
 
     SIGNAL FUData1, FUData2: std_logic_vector(31 downto 0);

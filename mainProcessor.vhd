@@ -233,8 +233,54 @@ COMPONENT WB_CU_Buffer IS
         RegWriteFlagOut : OUT std_logic;
         MEMDataOrEXResultSelectorOut : OUT std_logic);
 END COMPONENT WB_CU_Buffer;
+-- Execution Stage
+COMPONENT ExecutionStageALU IS
+    PORT(
+        Rsrc1 : IN std_logic_vector(2 downto 0);
+        Rdst : IN std_logic_vector(2 downto 0);
+        SwapSelector : IN std_logic;
+        InputPort : IN std_logic_vector(31 downto 0);
+        Rdata1 : IN std_logic_vector(31 downto 0);
+        Rdata2 : IN std_logic_vector(31 downto 0);
+        Immediate : IN std_logic_vector(31 downto 0);
+        ExexutionResultInMemory : IN std_logic_vector(31 downto 0);
+        MemoryResultInWriteBack : IN std_logic_vector(31 downto 0);
+        FuFirstOperandSelector : IN std_logic_vector(1 downto 0);
+        FuSecondOperandSelector : IN std_logic_vector(1 downto 0);
+        EXOperandsSelector : IN std_logic_vector(1 downto 0);
+        ALUControlSignals : IN std_logic_vector(2 downto 0);
+        ALUorInputSelector : IN std_logic;
 
-
+        FinalRdst: OUT std_logic_vector(2 downto 0);
+        EXResult : OUT std_logic_vector(31 downto 0);
+        FUdata1Mem : OUT std_logic_vector(31 downto 0);
+        FLags : OUT std_logic_vector(2 downto 0)
+        );
+END COMPONENT ExecutionStageALU;
+-- Flag Register 
+COMPONENT FlagRegister IS
+    PORT(
+        clk: IN std_logic;
+        SetC: IN std_logic;
+        Int_Ret_CallFlag: IN std_logic;
+        JumpAllow: IN std_logic;
+        FlagsAllow: IN std_logic_vector(1 downto 0);
+        JumpUpdateFlags: IN std_logic_vector(2 downto 0);
+        ALUFlags : IN std_logic_vector(2 downto 0);
+        Flags : OUT std_logic_vector(2 downto 0)
+        );
+END COMPONENT FlagRegister;
+-- Jump Unit
+COMPONENT JumpUnit IS
+    PORT(
+        JumpAllow: IN std_logic;
+        JumpType : IN std_logic_vector(1 downto 0);
+        Flags: IN std_logic_vector(2 downto 0);
+        UpdatedFlags : OUT std_logic_vector(2 downto 0);
+        JumpFlag : OUT std_logic
+        );
+END COMPONENT JumpUnit;
+--
 
 
 -- Program Counter Signals Out
@@ -341,7 +387,17 @@ END COMPONENT WB_CU_Buffer;
 -- WB_CU Signals Out 3rd Buffer
     SIGNAL WB_CU_3rd_Buffer_RegWriteFlagOut : std_logic;
     SIGNAL WB_CU_3rd_Buffer_MEMDataOrEXResultSelectorOut : std_logic;
---
+-- EX stage Signals Out
+    SIGNAL EX_FinalRdst : std_logic_vector(2 downto 0);
+    SIGNAL EX_Result : std_logic_vector(31 downto 0);
+    SIGNAL EX_FUdata1Mem : std_logic_vector(31 downto 0);
+    SIGNAL EX_FLags : std_logic_vector(2 downto 0);
+-- Flags Register Signals Out
+    SIGNAL FLAGS_Register : std_logic_vector(2 downto 0);
+-- Jump Unit Signals Out
+    SIGNAL JumpUnit_UpdatedFlags : std_logic_vector(2 downto 0);
+    SIGNAL JumpUnit_Flag : std_logic;
+
 BEGIN
 -- Connecting to Fetch Stage
 FetchStage: ProgramCounter PORT MAP (clk => Clk,
@@ -586,5 +642,44 @@ WB_CU_3rd_Buffer: WB_CU_Buffer PORT MAP (clk => Clk,
 
                              RegWriteFlagOut => WB_CU_3rd_Buffer_RegWriteFlagOut,
                              MEMDataOrEXResultSelectorOut => WB_CU_3rd_Buffer_MEMDataOrEXResultSelectorOut);
+-- Ex Unit
+EUwest: ExecutionStageALU PORT MAP(
+                             Rsrc1 => ID_EX_Buffer_Rsrc1Out,
+                             Rdst => ID_EX_Buffer_RdstOut,
+                             SwapSelector => EX_CU_Buffer_SwapSelectorOut,
+                             InputPort => IF_ID_Buffer_InputPort,
+                             Rdata1 => ID_EX_Buffer_ReadData1Out,
+                             Rdata2 => ID_EX_Buffer_ReadData2Out,
+                             Immediate => IF_ID_Buffer_Immediate,
+                             ExexutionResultInMemory => (others => '0'),
+                             MemoryResultInWriteBack => (others => '0'),
+                             FuFirstOperandSelector => (others => '0'),
+                             FuSecondOperandSelector => (others => '0'),
+                             EXOperandsSelector => EX_CU_Buffer_EXOperandTypeOut,
+                             ALUControlSignals => EX_CU_Buffer_ALUControlSignalsOut,
+                             ALUorInputSelector => EX_CU_Buffer_ALUOrInputSelectorOut,
 
+                             FinalRdst => EX_FinalRdst,
+                             EXResult => EX_Result,
+                             FUdata1Mem => EX_FUdata1Mem,
+                             FLags => EX_Flags);
+-- Flag Register
+Flagregisteer: FlagRegister PORT MAP(
+                             clk => Clk,
+                             SetC => EX_CU_Buffer_SetCOut,
+                             Int_Ret_CallFlag => MEM_CU_2nd_Buffer_InterruptOrCallOrReturnOut,
+                             JumpAllow => EX_CU_Buffer_JumpAllowOut,
+                             FlagsAllow => EX_CU_Buffer_FlagsAllowUpdateOut,
+                             JumpUpdateFlags => JumpUnit_UpdatedFlags,
+                             ALUFlags => EX_Flags,
+
+                             Flags => FLAGS_Register);
+-- Jump Unit
+JU : JumpUnit PORT MAP(JumpAllow => EX_CU_Buffer_JumpAllowOut,
+                             JumpType => EX_CU_Buffer_JumpTypeOut,
+                             Flags => FLAGS_Register,
+
+                             UpdatedFlags => JumpUnit_UpdatedFlags,
+                             JumpFlag => JumpUnit_Flag);
+                                        
 END mainProcessor_arch;	

@@ -1,4 +1,4 @@
-(1) Program Counter : Interrupt, IMMFromEXForJumping, IMMFromMEMForCall, ReadDataFromMEM
+(1) Program Counter : IMMFromEXForJumping, IMMFromMEMForCall, ReadDataFromMEM
 
 (2) Memory : WriteEnable, ReadEnable, address, datain
 
@@ -12,4 +12,8 @@
                              Rsrc1_EX => "000",
                              Rsrc2_EX => "000",
                              Rdst_MEM => "000",
- (5) 
+(5) ExecutionStageALU: ExexutionResultInMemory => (others => '0'),
+                             MemoryResultInWriteBack => (others => '0'),
+                             FuFirstOperandSelector => (others => '0'),
+                             FuSecondOperandSelector => (others => '0'),
+(6)

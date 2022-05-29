@@ -8,7 +8,7 @@ ENTITY ALU IS
         FirstOperand      : IN std_logic_vector(31 DOWNTO 0);
         SecondOperand     : IN std_logic_vector(31 DOWNTO 0);
         ALUResult         : OUT std_logic_vector(31 DOWNTO 0);
-        Flags             : OUT std_logic_vector(3 DOWNTO 0));
+        Flags             : OUT std_logic_vector(2 DOWNTO 0));
 END ENTITY ALU;
 
 ARCHITECTURE ALU_arch OF ALU IS
@@ -16,7 +16,7 @@ ARCHITECTURE ALU_arch OF ALU IS
     BEGIN
 		PROCESS(ALUControlSignals, FirstOperand, SecondOperand) IS
             VARIABLE ALUResultTemp : std_logic_vector(32 DOWNTO 0);
-            VARIABLE FlagsTemp : std_logic_vector(3 DOWNTO 0);
+            VARIABLE FlagsTemp : std_logic_vector(2 DOWNTO 0);
 
 			BEGIN
                 -- Intialize FlagsTemp to 0
