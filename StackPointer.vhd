@@ -26,7 +26,7 @@ ARCHITECTURE StackPointer_arch OF StackPointer IS
 
     BEGIN
         SP_Buffer: Register20Bits PORT MAP (clk => clk, Reset => Reset, enable => SPSelector, InputValue => NewSP, StoredValue => SP);
-        
+        -- push is 0 
         NewSP <= std_logic_vector(unsigned(SP) - 1) WHEN PushOrPopSelector = '0'
         ELSE std_logic_vector(unsigned(SP) + 1);
 
