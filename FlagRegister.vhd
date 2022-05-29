@@ -19,7 +19,7 @@ ARCHITECTURE FlagRegister_arch OF FlagRegister IS
     BEGIN
         PROCESS(clk)	
         BEGIN
-            IF (rising_edge(clk)) THEN
+            IF (Falling_edge(clk)) THEN
                 IF (Int_Ret_CallFlag = '1') THEN
                     temp <= '0';
                 ELSIF (Setc = '1') THEN
