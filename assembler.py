@@ -91,7 +91,7 @@ def fill_mem(memory):
 def write_mem(memory, file_name):
     with open(f"mem/{file_name}.mem", 'w') as f:
         f.write(r'''// memory data file (do not edit the following line - required for mem load use)
-// instance=/pipelinedprocessor/Fetch/RAM1/ram
+// instance=/mainProcessor/Memory/ram
 // format=mti addressradix=h dataradix=s version=1.0 wordsperline=1''')
         for k in sorted(memory):
             f.write(f'\n{k:x}: {memory[k][0:32]}')

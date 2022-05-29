@@ -25,4 +25,5 @@ NOT R2	       #R2= FFFFFFEF, C--> no change, N -->1,Z-->0
 INC R1         #R1= 6, C --> 0, N -->0, Z-->0
 OUT R1
 OUT R2
+NOP
 HLT

@@ -527,7 +527,7 @@ IF_ID_Buffer: IF_IDBuffer PORT MAP (clk => Clk,
 
 -- Connecting to Register File
 RegisterFile: Registers PORT MAP (clk => Clk,
-                             Reset => '0',
+                             Reset => Reset,
                              RegWriteFlag => WB_CU_3rd_Buffer_RegWriteFlagOut,
                              Rsrc1 => IF_ID_Buffer_Rsrc1,
                              Rsrc2 => IF_ID_Buffer_Rsrc2,
