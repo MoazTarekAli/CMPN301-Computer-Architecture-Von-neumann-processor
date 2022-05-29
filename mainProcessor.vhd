@@ -6,7 +6,8 @@ ENTITY mainProcessor IS
         Clk : IN STD_LOGIC;
         Reset : IN STD_LOGIC;
         Interrupt : IN STD_LOGIC;
-        InputPort : IN STD_LOGIC_VECTOR(31 downto 0)
+        InputPort : IN STD_LOGIC_VECTOR(31 downto 0);
+        OutputPort : OUT STD_LOGIC_VECTOR(31 downto 0)
         );
 END ENTITY mainProcessor;
 
@@ -280,8 +281,28 @@ COMPONENT JumpUnit IS
         JumpFlag : OUT std_logic
         );
 END COMPONENT JumpUnit;
---
+-- EX/MEM Buffer
+COMPONENT EX_MEMBuffer IS
+    PORT(
+        clk: IN std_logic;
+        FlushAtNextFall: IN std_logic;
+        FlushNow: IN std_logic;
+        Enable: IN std_logic;
 
+        ReadData1 : IN std_logic_vector(31 downto 0);
+        EXResult : IN std_logic_vector(31 DOWNTO 0);
+        PC : IN std_logic_vector(19 DOWNTO 0);
+        Flags : IN std_logic_vector(2 DOWNTO 0);
+        Rdst : IN std_logic_vector(2 DOWNTO 0);
+        
+        ReadData1Out : OUT std_logic_vector(31 downto 0);
+        EXResultOut : OUT std_logic_vector(31 DOWNTO 0);
+        FlagsConcatenatedPCOut: OUT std_logic_vector(31 DOWNTO 0);
+        RdstOut : OUT std_logic_vector(2 DOWNTO 0));
+END COMPONENT EX_MEMBuffer;
+
+SIGNAL Memory_Address : std_logic_vector(19 DOWNTO 0) := (others=>'0');
+SIGNAL Memory_Write_Data : std_logic_vector(31 DOWNTO 0) := (others=>'0');
 
 -- Program Counter Signals Out
     SIGNAL PC_To_Memory : std_logic_vector(19 DOWNTO 0);
@@ -397,6 +418,11 @@ END COMPONENT JumpUnit;
 -- Jump Unit Signals Out
     SIGNAL JumpUnit_UpdatedFlags : std_logic_vector(2 downto 0);
     SIGNAL JumpUnit_Flag : std_logic;
+-- Ex/MEM Buffer Signals Out
+    SIGNAL EX_MEM_Buffer_ReadData1Out : std_logic_vector(31 downto 0);
+    SIGNAL EX_MEM_Buffer_EXResultOut : std_logic_vector(31 DOWNTO 0);
+    SIGNAL EX_MEM_Buffer_FlagsConcatenatedPCOut: std_logic_vector(31 DOWNTO 0);
+    SIGNAL EX_MEM_Buffer_RdstOut : std_logic_vector(2 DOWNTO 0);
 
 BEGIN
 -- Connecting to Fetch Stage
@@ -415,12 +441,12 @@ FetchStage: ProgramCounter PORT MAP (clk => Clk,
 
 -- Connecting to memory
 Memorym: Memory PORT MAP    (clk => Clk,     
-                             WriteEnable => '0',
-                             ReadEnable  => '0',
+                             WriteEnable => MEM_CU_2nd_Buffer_MemoryWriteOut,
+                             ReadEnable  => MEM_CU_2nd_Buffer_MemoryReadOut,
                              Reset => Reset,
-                             address => (others => '0'),
+                             address => Memory_Address,
                              ProgramCounter => PC_To_Memory,
-                             datain => (others => '0'),  
+                             datain => Memory_Write_Data,  
                              
                              dataout => Memory_DataOut,
                              Intruction => Memory_Instruction);
@@ -498,14 +524,14 @@ CU : ControlUnit PORT MAP (Clk => Clk,
 HDU : HazardDetectionUnit PORT MAP (HLTFlag => CU_HLTFlag,
                              Reset => Reset,
                              SwapOrInterruptDelay => CU_SwapOrInterruptDelay,
-                             JumpFlag => '0',
-                             MEM_Read => '0',
-                             MEM_Write => '0',
-                             Call_Ret_IntFlag => '0',
-                             NeedFUFlag => '0',
-                             Rsrc1_EX => "000",
-                             Rsrc2_EX => "000",
-                             Rdst_MEM => "000",
+                             JumpFlag => JumpUnit_Flag,
+                             MEM_Read => MEM_CU_2nd_Buffer_MemoryReadOut,
+                             MEM_Write => MEM_CU_2nd_Buffer_MemoryWriteOut,
+                             Call_Ret_IntFlag => MEM_CU_2nd_Buffer_InterruptOrCallOrReturnOut,
+                             NeedFUFlag => EX_CU_Buffer_NeedFUOut,
+                             Rsrc1_EX => ID_EX_Buffer_Rsrc1Out,
+                             Rsrc2_EX => ID_EX_Buffer_Rsrc2Out,
+                             Rdst_MEM => EX_MEM_Buffer_RdstOut,
                              
                              PCSelector => HDU_PC_Selector,
                              -- These Signals represent FlushAtNextFall, FlushNow, Enable
@@ -681,5 +707,27 @@ JU : JumpUnit PORT MAP(JumpAllow => EX_CU_Buffer_JumpAllowOut,
 
                              UpdatedFlags => JumpUnit_UpdatedFlags,
                              JumpFlag => JumpUnit_Flag);
-                                        
+-- Connecting to EX/MEM Buffer 
+EX_MemBufffer: EX_MEMBuffer PORT MAP (
+                             clk => Clk,
+                             FlushAtNextFall => HDU_EX_MEM_Signals(2),
+                             FlushNow => HDU_EX_MEM_Signals(1),
+                             Enable => HDU_EX_MEM_Signals(0),
+
+                             ReadData1 => EX_FUdata1Mem,
+                             EXResult => EX_Result,
+                             PC => ID_EX_Buffer_PCOut,
+                             Flags => FLAGS_Register,
+                             Rdst => EX_FinalRdst,
+                             
+                             ReadData1Out => EX_MEM_Buffer_ReadData1Out,
+                             EXResultOut => EX_MEM_Buffer_EXResultOut,
+                             FlagsConcatenatedPCOut => EX_MEM_Buffer_FlagsConcatenatedPCOut,
+                             RdstOut => EX_MEM_Buffer_RdstOut);
+-- Output port
+OutputPort <= Ex_Result; -- WHEN EX_CU_Buffer_OutputPortAllowOut = '1' ELSE (others => 'Z') END;
+
+-- Memory address and data
+
+
 END mainProcessor_arch;	

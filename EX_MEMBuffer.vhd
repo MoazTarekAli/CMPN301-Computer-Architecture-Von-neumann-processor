@@ -11,7 +11,7 @@ ENTITY EX_MEMBuffer IS
         ReadData1 : IN std_logic_vector(31 downto 0);
         EXResult : IN std_logic_vector(31 DOWNTO 0);
         PC : IN std_logic_vector(19 DOWNTO 0);
-        Flags : IN std_logic_vector(3 DOWNTO 0);
+        Flags : IN std_logic_vector(2 DOWNTO 0);
         Rdst : IN std_logic_vector(2 DOWNTO 0);
         
         ReadData1Out : OUT std_logic_vector(31 downto 0);
@@ -32,8 +32,8 @@ ARCHITECTURE EX_MEMBuffer_arch OF EX_MEMBuffer IS
             ELSIF falling_edge(clk) AND Enable = '1' THEN
                 ReadData1Out <= ReadData1;
                 EXResultOut <= EXResult;
-                FlagsConcatenatedPCOut(23 DOWNTO 0) <= Flags & PC;
-                FlagsConcatenatedPCOut(31 DOWNTO 24) <= (others => '0');
+                FlagsConcatenatedPCOut(22 DOWNTO 0) <= Flags & PC;
+                FlagsConcatenatedPCOut(31 DOWNTO 23) <= (others => '0');
                 RdstOut <= Rdst;
             END IF;
         END PROCESS;

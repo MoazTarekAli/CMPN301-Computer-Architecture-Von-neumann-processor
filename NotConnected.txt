@@ -4,14 +4,7 @@
 
 (3) Registers : RegWriteFlag, RegWriteData, Rdst
 
-(4) HazardDetectionUnit : JumpFlag => '0',
-                             MEM_Read => '0',
-                             MEM_Write => '0',
-                             Call_Ret_IntFlag => '0',
-                             NeedFUFlag => '0',
-                             Rsrc1_EX => "000",
-                             Rsrc2_EX => "000",
-                             Rdst_MEM => "000",
+
 (5) ExecutionStageALU: ExexutionResultInMemory => (others => '0'),
                              MemoryResultInWriteBack => (others => '0'),
                              FuFirstOperandSelector => (others => '0'),
