@@ -4,6 +4,7 @@ USE IEEE.std_logic_1164.all;
 ENTITY FlagRegister IS
     PORT(
         clk: IN std_logic;
+        Reset: IN std_logic;
         SetC: IN std_logic;
         Int_Ret_CallFlag: IN std_logic;
         JumpAllow: IN std_logic;
@@ -17,9 +18,11 @@ END ENTITY FlagRegister;
 ARCHITECTURE FlagRegister_arch OF FlagRegister IS
     SIGNAL temp : std_logic;
     BEGIN
-        PROCESS(clk)	
+        PROCESS(clk, Reset)	
         BEGIN
-            IF (Falling_edge(clk)) THEN
+            IF (Reset = '1') THEN
+                Flags <= (others => '0');
+            ELSIF (Falling_edge(clk)) THEN
                 IF (Int_Ret_CallFlag = '1') THEN
                     temp <= '0';
                 ELSIF (Setc = '1') THEN

@@ -2,8 +2,11 @@ vsim work.mainprocessor
 
 add wave -position insertpoint sim:/mainprocessor/*
 mem load -filltype value -filldata 16#0000000A -fillradix symbolic /mainprocessor/Memorym/ram(0)
-mem load -filltype value -filldata 16#6FFF000A -fillradix symbolic /mainprocessor/Memorym/ram(10)
-mem load -filltype value -filldata 16#00FF000A -fillradix symbolic /mainprocessor/Memorym/ram(11)
+mem load -filltype value -filldata 16#00000000 -fillradix symbolic /mainprocessor/Memorym/ram(10)
+mem load -filltype value -filldata 16#00000000 -fillradix symbolic /mainprocessor/Memorym/ram(11)
+mem load -filltype value -filldata 16#00000000 -fillradix symbolic /mainprocessor/Memorym/ram(12)
+mem load -filltype value -filldata 16#00000000 -fillradix symbolic /mainprocessor/Memorym/ram(13)
+mem load -filltype value -filldata 16#0FFF000A -fillradix symbolic /mainprocessor/Memorym/ram(14)
 
 force -freeze sim:/mainprocessor/Clk 0 0, 1 {50 ps} -r 100
 force -freeze sim:/mainprocessor/Reset 1 0
@@ -11,6 +14,38 @@ force -freeze sim:/mainprocessor/Interrupt 0 0
 force -freeze sim:/mainprocessor/InputPort 16#F0F0F0F0 0
 run
 run
+force -freeze sim:/mainprocessor/Reset 0 0
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+mem load -filltype value -filldata {00010000000000000000000000000000 } -fillradix symbolic /mainprocessor/Memorym/ram(10)
+force -freeze sim:/mainprocessor/Reset 1 0
+run
+run
+run
+run
+run
+run
+run
+run
+run
+force -freeze sim:/mainprocessor/Reset 0 0
+run
+run
+run
+run
+run
+run
+run
+mem load -filltype value -filldata {00110000000000000000000000000000 } -fillradix symbolic /mainprocessor/Memorym/ram(10)
+force -freeze sim:/mainprocessor/Reset 1 0
 run
 force -freeze sim:/mainprocessor/Reset 0 0
 run
@@ -22,25 +57,37 @@ force -freeze sim:/mainprocessor/Reset 0 0
 run
 run
 run
+run
+run
+run
+run
+
+mem load -filltype value -filldata {00001111111111110000000000001010 } -fillradix symbolic /mainprocessor/Memorym/ram(19)
+mem load -filltype value -filldata {00101000000000000000000000000000 } -fillradix symbolic /mainprocessor/Memorym/ram(11)
+mem load -filltype value -filldata {00011000000000000000000000000000 } -fillradix symbolic /mainprocessor/Memorym/ram(12)
+mem load -filltype value -filldata {00000111111111110000000000001010 } -fillradix symbolic /mainprocessor/Memorym/ram(14)
+mem load -filltype value -filldata {00000111111111110000000000001010 } -fillradix symbolic /mainprocessor/Memorym/ram(15)
+mem load -filltype value -filldata {00000111111111110000000000001010 } -fillradix symbolic /mainprocessor/Memorym/ram(16)
+mem load -filltype value -filldata {00000111111111110000000000001010 } -fillradix symbolic /mainprocessor/Memorym/ram(17)
+mem load -filltype value -filldata {00000111111111110000000000001010 } -fillradix symbolic /mainprocessor/Memorym/ram(18)
+
+run
+run
+run
+run
+run
+
+mem load -filltype value -filldata {00010000000000000000000000000000 } -fillradix symbolic /mainprocessor/Memorym/ram(13)
+mem load -filltype value -filldata {00100000000000000000000000000000 } -fillradix symbolic /mainprocessor/Memorym/ram(13)
 force -freeze sim:/mainprocessor/Reset 1 0
 run
-run
+
 force -freeze sim:/mainprocessor/Reset 0 0
 run
 run
 run
 run
 run
-run
-run
-run
-run
-run
-run
-mem load -filltype value -filldata {00000111111111110000000000001010 } -fillradix symbolic /mainprocessor/Memorym/ram(10)
-force -freeze sim:/mainprocessor/Reset 1 0
-run
-force -freeze sim:/mainprocessor/Reset 0 0
 run
 run
 run

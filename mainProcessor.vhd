@@ -1,5 +1,6 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.all;
+USE IEEE.numeric_std.all;
 
 ENTITY mainProcessor IS
     PORT(
@@ -262,6 +263,7 @@ END COMPONENT ExecutionStageALU;
 COMPONENT FlagRegister IS
     PORT(
         clk: IN std_logic;
+        Reset : IN std_logic;
         SetC: IN std_logic;
         Int_Ret_CallFlag: IN std_logic;
         JumpAllow: IN std_logic;
@@ -525,7 +527,7 @@ IF_ID_Buffer: IF_IDBuffer PORT MAP (clk => Clk,
 
 -- Connecting to Register File
 RegisterFile: Registers PORT MAP (clk => Clk,
-                             Reset => Reset,
+                             Reset => '0',
                              RegWriteFlag => WB_CU_3rd_Buffer_RegWriteFlagOut,
                              Rsrc1 => IF_ID_Buffer_Rsrc1,
                              Rsrc2 => IF_ID_Buffer_Rsrc2,
@@ -745,6 +747,7 @@ EUwest: ExecutionStageALU PORT MAP(
 -- Flag Register
 Flagregisteer: FlagRegister PORT MAP(
                              clk => Clk,
+                             Reset => Reset,
                              SetC => EX_CU_Buffer_SetCOut,
                              Int_Ret_CallFlag => MEM_CU_2nd_Buffer_InterruptOrCallOrReturnOut,
                              JumpAllow => EX_CU_Buffer_JumpAllowOut,
