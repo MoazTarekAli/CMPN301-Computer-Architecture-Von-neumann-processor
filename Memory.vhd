@@ -16,7 +16,7 @@ ENTITY Memory IS
 END ENTITY Memory;
 
 ARCHITECTURE syncrama OF Memory IS
-	TYPE ram_type IS ARRAY(0 TO 249999) OF std_logic_vector(31 DOWNTO 0);
+	TYPE ram_type IS ARRAY(0 TO 1048575) OF std_logic_vector(31 DOWNTO 0);
 	SIGNAL ram : ram_type;
 	
 	BEGIN

@@ -1,0 +1,19 @@
+vsim work.mainprocessor
+
+add wave -position insertpoint sim:/mainprocessor/*
+force -freeze sim:/mainprocessor/HDU_PC_Selector 00 0
+force -freeze sim:/mainprocessor/Clk 0 0, 1 {50 ps} -r 100
+force -freeze sim:/mainprocessor/Reset 1 0
+mem load -filltype value -filldata 16#0000000A -fillradix symbolic /mainprocessor/Memorym/ram(0)
+mem load -filltype value -filldata 16#0 -fillradix symbolic /mainprocessor/Memorym/ram(10)
+mem load -filltype value -filldata 16#0 -fillradix symbolic /mainprocessor/Memorym/ram(11)
+force -freeze sim:/mainprocessor/HDU_IF_ID_Signals 000 0
+run
+run
+force -freeze sim:/mainprocessor/HDU_IF_ID_Signals 001 0
+force -freeze sim:/mainprocessor/Reset 0 0
+force -freeze sim:/mainprocessor/Interrupt 1 0
+force -freeze sim:/mainprocessor/Interrupt 0 0
+force -freeze sim:/mainprocessor/InputPort 16#FFFF0F0F 0
+run
+run
