@@ -731,7 +731,7 @@ EUwest: ExecutionStageALU PORT MAP(
                              InputPort => IF_ID_Buffer_InputPort,
                              Rdata1 => ID_EX_Buffer_ReadData1Out,
                              Rdata2 => ID_EX_Buffer_ReadData2Out,
-                             Immediate => IF_ID_Buffer_Immediate,
+                             Immediate => ID_EX_Buffer_ImmediateOut,
                              ExexutionResultInMemory => EX_MEM_Buffer_EXResultOut,
                              MemoryResultInWriteBack => FINAL_WB,
                              FuFirstOperandSelector => FU_FirstOperand,

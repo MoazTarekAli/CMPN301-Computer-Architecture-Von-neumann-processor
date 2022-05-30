@@ -54,8 +54,8 @@ def parse_instruction(instruction: string):
         part.append(f'{int("0",16):05b}')
         part.append(f'{int(instruction[3],16):016b}')
     if op in (opcode["MOV"], opcode["SWAP"]):
-        part.append(f'{(int(instruction[1][1],16)):03b}')
-        part.append(f'{int(instruction[2][1],16):03b}')
+        part.append(f'{(int(instruction[2][1],16)):03b}')
+        part.append(f'{int(instruction[1][1],16):03b}')
     if op in (opcode["ADD"], opcode["SUB"], opcode["AND"]):
         part.append(f'{(int(instruction[1][1],16)):03b}')
         part.append(f'{int(instruction[2][1],16):03b}')
@@ -113,7 +113,7 @@ def asm2mem(file_name: string):
         if i[0] == ".ORG":
             address = int(i[1], 16)
 
-        elif all(c in string.hexdigits for c in i[0]):
+        elif all(c in string.hexdigits for c in i[0]) and i[0] != "ADD":
             # convert hexadecimal to binary and write to mem
             memory[address] = f'{int(i[0], 16):032b}'
             # move address

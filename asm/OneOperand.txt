@@ -7,10 +7,7 @@ force -freeze sim:/mainprocessor/Reset 1 0
 force -freeze sim:/mainprocessor/Interrupt 0 0
 force -freeze sim:/mainprocessor/InputPort 16#00000005 0
 run
-# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
-#    Time: 0 ps  Iteration: 2  Instance: /mainprocessor/EUwest/ALUEX
-# ** Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
-#    Time: 0 ps  Iteration: 2  Instance: /mainprocessor/EUwest/ALUEX
+
 run
 force -freeze sim:/mainprocessor/Reset 0 0
 run

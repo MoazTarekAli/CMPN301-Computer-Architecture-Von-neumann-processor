@@ -13,7 +13,7 @@ END ENTITY JumpUnit;
 
 ARCHITECTURE JumpUnit_arch OF JumpUnit IS
 BEGIN
-    JumpFlag <= '1' WHEN (JumpType = "00" and Flags(0) = '1') OR (JumpType = "01" and Flags(1) = '1') OR (JumpType = "10" and Flags(2) = '1') OR (JumpType = "11")
+    JumpFlag <= '1' WHEN ((JumpType = "00" and Flags(0) = '1') OR (JumpType = "01" and Flags(1) = '1') OR (JumpType = "10" and Flags(2) = '1') OR (JumpType = "11")) AND JumpAllow = '1'
     ELSE '0';
     UpdatedFlags(0) <= '0' WHEN JumpType = "00" and Flags(0) = '1'
     ELSE Flags(0);
