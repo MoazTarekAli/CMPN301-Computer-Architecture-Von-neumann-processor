@@ -725,7 +725,7 @@ WB_CU_3rd_Buffer: WB_CU_Buffer PORT MAP (clk => Clk,
                              MEMDataOrEXResultSelectorOut => WB_CU_3rd_Buffer_MEMDataOrEXResultSelectorOut);
 -- Ex Unit
 EUwest: ExecutionStageALU PORT MAP(
-                             Rsrc1 => ID_EX_Buffer_Rsrc1Out,
+                             Rsrc1 => ID_EX_Buffer_Rsrc2Out,
                              Rdst => ID_EX_Buffer_RdstOut,
                              SwapSelector => EX_CU_Buffer_SwapSelectorOut,
                              InputPort => IF_ID_Buffer_InputPort,
