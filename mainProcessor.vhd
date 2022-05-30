@@ -309,7 +309,8 @@ COMPONENT StackPointer IS
         Reset: IN std_logic;
         PushOrPopSelector: IN std_logic;
         SPSelector: IN std_logic;
-        SPToMemory: OUT std_logic_vector(19 DOWNTO 0));
+        SPToMemory: OUT std_logic_vector(19 DOWNTO 0);
+        StoredValue: OUT std_logic_vector(19 DOWNTO 0));
 END COMPONENT StackPointer;
 -- MEM/WB Buffer
 COMPONENT MEM_WBBuffer IS
@@ -471,6 +472,7 @@ SIGNAL FINAL_WB : std_logic_vector(31 DOWNTO 0) := (others=>'0');
     SIGNAL EX_MEM_Buffer_RdstOut : std_logic_vector(2 DOWNTO 0);
 -- Stack Pointer Signals Out
     SIGNAL SP_ToMemory : std_logic_vector(19 downto 0);
+    SIGNAL SP_Now : std_logic_vector(19 downto 0);
 -- MEM/WB Buffer Signals Out
     SIGNAL MEM_WB_Buffer_EXResultOut : std_logic_vector(31 DOWNTO 0);
     SIGNAL MEM_WB_Buffer_DataMemoryOut : std_logic_vector(31 DOWNTO 0);
@@ -789,7 +791,8 @@ SU: StackPointer PORT MAP (
                              PushOrPopSelector => MEM_CU_2nd_Buffer_PushOrPopSelectorOut,
                              SPSelector => MEM_CU_2nd_Buffer_SPSelectorOut,
                              
-                             SPToMemory => SP_ToMemory);
+                             SPToMemory => SP_ToMemory,
+                             StoredValue => SP_Now);
 -- Memory address and data
 Memory_Address <= (0 => '1',others => '0') WHEN MEM_CU_2nd_Buffer_AddressSelectorOut = "00"
 ELSE EX_MEM_Buffer_EXResultOut(19 DOWNTO 0) WHEN MEM_CU_2nd_Buffer_AddressSelectorOut = "01"

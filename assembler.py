@@ -41,18 +41,33 @@ def parse_instruction(instruction: string):
     if op in (opcode["NOT"], opcode["INC"], opcode["IN"]):
         part.append(f'{(int(instruction[1][1],16)):03b}')
         part.append(f'{(int(instruction[1][1],16)):03b}')
-    if op in (opcode["OUT"], opcode["PUSH"], opcode["POP"]):
+    if op in (opcode["OUT"], opcode["POP"]):
         part.append(f'{(int(instruction[1][1],16)):03b}')
-    if op in (opcode["LDD"], opcode["STD"]):
+    if op in (opcode["PUSH"]):
+        part.append(f'{(int(instruction[1][1],16)):03b}')
+        part.append(f'{(int(instruction[1][1],16)):03b}')
+    if op in (opcode["STD"]):
         # swap offset value and 2nd register
         # from opcode, rd, offset, rs
         # to opcode, rd, rs, offset
+        part.append(f'{(int(instruction[1][1],16)):03b}')
         part.append(f'{(int(instruction[1][1],16)):03b}')
         instruction[2], instruction[3] = instruction[3], instruction[2]
         part.append(f'{int(instruction[2][1],16):03b}')
         # Rsrc2 & filler bits, 5 unused bits
         part.append(f'{int("0",16):05b}')
         part.append(f'{int(instruction[3],16):016b}')
+
+    if op in (opcode["LDD"]):
+        # swap offset value and 2nd register
+        # from opcode, rd, offset, rs
+        # to opcode, rd, rs, offset
+        part.append(f'{(int(instruction[1][1],16)):03b}')
+        part.append(f'{int(instruction[3][1],16):03b}')
+        # Rsrc2 & filler bits, 5 unused bits
+        part.append(f'{int("0",16):05b}')
+        part.append(f'{int(instruction[2],16):016b}')
+
     if op in (opcode["MOV"]):
         part.append(f'{(int(instruction[2][1],16)):03b}')
         part.append(f'{int(instruction[1][1],16):03b}')
